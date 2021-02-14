@@ -29,3 +29,12 @@ class Post(models.Model):
         if self.translation:
             return self.translation[:50]
         return self.text[:50]
+
+
+class Statistic(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.DO_NOTHING)
+    used_times = models.PositiveIntegerField()
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return str(self.post)
