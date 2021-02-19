@@ -32,9 +32,9 @@ class Post(models.Model):
 
 
 class Statistic(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.DO_NOTHING)
-    used_times = models.PositiveIntegerField()
+    post = models.ForeignKey(Post, on_delete=models.DO_NOTHING, related_name='statistics')
+    used_times = models.PositiveIntegerField(default=0)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return str(self.post)

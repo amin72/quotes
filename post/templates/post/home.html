@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,18 +51,27 @@
       <div class="col m12">
         <div class="card blue-grey darken-1">
           <div class="card-content white-text">
-            <span class="card-title">Quote <span class="badge blue new" data-badge-caption="">10</span></span>
-            <p>{{ post }}</p>
+            <span class="card-title">Quote <span class="badge blue new" data-badge-caption="">
+              {% if post.statistics.used_times %}
+                {{ post.statistics.used_times }}
+              {% else %}
+                0
+              {% endif %}
+            </span></span>
+            <p>{{ post.text }}</p>
             <hr>
-            {% comment %} <p>{{ post.translation }}</p> {% endcomment %}
+            <p>{{ post.translation }}</p>
           </div>
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="col m12">
-        <button class="btn btn-large">Get new quote</button>
+      <div class="col s12 m6">
+        <button class="btn btn-large" style="width: 100%; margin-top: 6px;">Get new quote</button>
+      </div>
+      <div class="col s12 m6">
+        <button id="use_this_quote" class="btn btn-large" style="width: 100%; margin-top: 6px;">Use this quote</button>
       </div>
     </div>
   </div>
@@ -133,5 +143,25 @@
       <div class="container center-align">&copy; 2021 Designed by Amin</div>
     </div>
   </footer>
+
+  <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+  <script>
+    $('#use_this_quote').click(function() {
+      var post_id = {{ post.id }}
+      $.ajax({
+        type: 'POST',
+        url: "{% url 'post:add_to_statistics' %}",
+        data: {
+          'post_id': post_id
+        },
+        success: function(data) {
+          console.log('success')
+        },
+        error: function(err) {
+          console.log('error')
+        }
+      })
+    })
+  </script>
 </body>
 </html>
